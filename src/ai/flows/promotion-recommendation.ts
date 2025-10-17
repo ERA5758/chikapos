@@ -11,7 +11,7 @@ import { ai } from '@/ai/genkit';
 import { z } from 'genkit';
 
 export const PromotionRecommendationInputSchema = z.object({
-  businessDescription: z.string().describe('A brief description of the business (e.g., "kafe", "vape store").'),
+  businessDescription: z.string().describe('A brief description of the business (e.g., "toko pakaian", "vape store", "toko kelontong").'),
   activeStoreName: z.string().describe('The name of the store for context.'),
   currentRedemptionOptions: z.array(
     z.object({
@@ -45,7 +45,7 @@ export async function getPromotionRecommendations(
   return promotionRecommendationFlow(input);
 }
 
-const promptText = `Anda adalah Chika AI, seorang ahli strategi loyalitas untuk bisnis F&B **{{businessDescription}}** bernama **{{activeStoreName}}**.
+const promptText = `Anda adalah Chika AI, seorang ahli strategi loyalitas untuk bisnis ritel **{{businessDescription}}** bernama **{{activeStoreName}}**.
 
 Tugas Anda adalah menganalisis data dan menghasilkan 2-3 rekomendasi promo loyalitas yang kreatif.
 
@@ -59,19 +59,19 @@ Tugas Anda adalah menganalisis data dan menghasilkan 2-3 rekomendasi promo loyal
 
 **Instruksi Penting:**
 1.  **Gunakan Data Produk**: Saat membuat rekomendasi, **gunakan nama produk aktual** dari daftar terlaris atau kurang laris.
-    -   Contoh **Baik**: "Bundling Hemat: Dapatkan Roti Sobek (produk kurang laris) dengan diskon 50% setiap pembelian Kopi Susu (produk terlaris)."
+    -   Contoh **Baik**: "Paket Hemat: Dapatkan Kaos Kaki (produk kurang laris) dengan diskon 50% setiap pembelian Kemeja Lengan Panjang (produk terlaris)."
     -   Contoh **Buruk**: "Bundling produk terlaris dan kurang laris."
 2.  **Fokus Rekomendasi**:
-    -   Buat promo baru yang menarik (misal: "Diskon khusus hari Selasa").
-    -   Usulkan 'bundling' antara produk terlaris dan kurang laris untuk meningkatkan penjualan produk yang lambat.
+    -   Buat promo baru yang menarik (misal: "Diskon khusus akhir pekan").
+    -   Usulkan \'bundling\' antara produk terlaris dan kurang laris untuk meningkatkan penjualan produk yang lambat.
     -   Sarankan promo untuk menonaktifkan atau mengubah promo lama yang mungkin kurang efektif.
-3.  **Spesifik & Relevan**: Semua rekomendasi harus relevan untuk sebuah **{{businessDescription}}**. Hindari menyarankan produk atau promo yang tidak sesuai (misalnya, jangan sarankan kopi untuk toko vape).
+3.  **Spesifik & Relevan**: Semua rekomendasi harus relevan untuk sebuah **{{businessDescription}}**. Hindari menyarankan produk atau promo yang tidak sesuai.
 4.  **Format Output**: Setiap rekomendasi HARUS memiliki:
-    -   'title': Judul singkat dan menarik.
-    -   'description': Deskripsi promo yang akan dilihat pelanggan (gunakan nama produk!).
-    -   'justification': Alasan singkat mengapa ini ide yang bagus.
-    -   'pointsRequired': Jumlah poin yang disarankan.
-    -   'value': Nilai promo dalam Rupiah (jika diskon, gunakan nilai diskon. Jika barang gratis, bisa 0).`;
+    -   \'title\': Judul singkat dan menarik.
+    -   \'description\': Deskripsi promo yang akan dilihat pelanggan (gunakan nama produk!).
+    -   \'justification\': Alasan singkat mengapa ini ide yang bagus.
+    -   \'pointsRequired\': Jumlah poin yang disarankan.
+    -   \'value\': Nilai promo dalam Rupiah (jika diskon, gunakan nilai diskon. Jika barang gratis, bisa 0).`;
 
 
 export const promotionRecommendationFlow = ai.defineFlow(

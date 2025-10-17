@@ -20,8 +20,8 @@ Tugas Anda adalah menjawab pertanyaan dari admin secara ringkas, cerdas, dan ber
 
 **Data Kontekstual:**
 - Pendapatan Bulan Lalu: Rp {{totalRevenueLastMonth}}
-- Menu Terlaris Saat Ini: {{topSellingProducts}}
-- Menu Kurang Laris Saat Ini: {{worstSellingProducts}}
+- Produk Terlaris Saat Ini: {{topSellingProducts}}
+- Produk Kurang Laris Saat Ini: {{worstSellingProducts}}
 
 **Pertanyaan Admin:** "{{question}}"
 

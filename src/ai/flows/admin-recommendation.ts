@@ -12,7 +12,7 @@ import { ai } from '@/ai/genkit';
 import { z } from 'genkit';
 
 const AdminRecommendationInputSchema = z.object({
-  businessDescription: z.string().describe('A brief description of the business (e.g., "kafe", "vape store").'),
+  businessDescription: z.string().describe('A brief description of the business (e.g., "toko pakaian", "vape store", "toko kelontong").'),
   totalRevenueLastWeek: z.number().describe('Total revenue from the previous week.'),
   totalRevenueLastMonth: z.number().describe('Total revenue from the previous month.'),
   topSellingProducts: z.array(z.string()).describe('A list of the best-selling products.'),
@@ -32,7 +32,7 @@ export async function getAdminRecommendations(
   return adminRecommendationFlow(input);
 }
 
-const promptText = `Anda adalah Chika AI, seorang analis bisnis ahli untuk Kasir POS Chika F&B. Anda sedang memberikan saran untuk sebuah **{{businessDescription}}**.
+const promptText = `Anda adalah Chika AI, seorang analis bisnis ahli untuk Kasir POS Chika. Anda sedang memberikan saran untuk sebuah **{{businessDescription}}**.
 
 Tugas Anda adalah memberikan rekomendasi strategis mingguan dan bulanan untuk admin toko berdasarkan data kinerja berikut. Rekomendasi harus singkat, dapat ditindaklanjuti, relevan dengan jenis bisnis, dan dalam Bahasa Indonesia.
 
@@ -52,9 +52,9 @@ Berdasarkan data ini:
 
 1.  Buat **rekomendasi mingguan** yang berfokus pada tindakan jangka pendek. Pastikan saran Anda relevan untuk sebuah **{{businessDescription}}**.
     {{#if worstSellingProducts.length}}
-    Contoh: Sarankan promosi \'bundling\' untuk produk yang kurang laris dengan produk terlaris, atau adakan acara \'happy hour\' pada hari-hari sepi.\
+    Contoh: Sarankan promosi \'bundling\' untuk produk yang kurang laris dengan produk terlaris, atau adakan \'flash sale\' pada akhir pekan.\
     {{else}}
-    Contoh: Karena semua produk berkinerja baik, sarankan untuk fokus pada peningkatan interaksi pelanggan, seperti meminta ulasan atau menjalankan promosi di media sosial untuk meningkatkan kunjungan.\
+    Contoh: Karena semua produk berkinerja baik, sarankan untuk fokus pada peningkatan interaksi pelanggan, seperti meminta ulasan produk atau menjalankan promosi di media sosial untuk meningkatkan kunjungan.\
     {{/if}}
 
 2.  Buat **rekomendasi bulanan** yang berfokus pada strategi jangka panjang dan relevan untuk sebuah **{{businessDescription}}**.

@@ -25,7 +25,7 @@ export const LoyaltyPointRecommendationOutputSchema = z.object({
 export type LoyaltyPointRecommendationOutput = z.infer<typeof LoyaltyPointRecommendationOutputSchema>;
 
 
-const PROMPT_TEMPLATE = `Anda adalah seorang ahli dalam program loyalitas dan interaksi pelanggan untuk bisnis F&B.
+const PROMPT_TEMPLATE = `Anda adalah seorang ahli dalam program loyalitas dan interaksi pelanggan untuk bisnis ritel.
 Seorang pelanggan memiliki {{loyaltyPoints}} poin loyalitas dan sedang melakukan pembelian sebesar Rp {{totalPurchaseAmount}}.
 Berikut adalah pilihan penukaran yang tersedia:
 
@@ -35,7 +35,7 @@ Berikut adalah pilihan penukaran yang tersedia:
 
 Berdasarkan informasi ini, rekomendasikan cara optimal bagi pelanggan untuk menukarkan poin mereka guna memaksimalkan keuntungan dan mendorong penukaran.
 Rekomendasi harus berupa satu kalimat dalam Bahasa Indonesia.
-Berikan contoh yang relevan dengan F&B, misalnya "Tukarkan poin Anda dengan hidangan penutup gratis!" atau "Dapatkan diskon untuk pesanan Anda berikutnya!".
+Berikan contoh yang relevan dengan ritel, misalnya "Tukarkan poin Anda dengan voucher belanja!" atau "Dapatkan diskon untuk pembelian Anda berikutnya!".
 
 Rekomendasi: `;
 
