@@ -8,8 +8,8 @@ import { SpeedInsights } from "@vercel/speed-insights/next"
 import PwaInstaller from '@/components/Pwa-installer';
 
 export const metadata: Metadata = {
-  title: 'Kasir POS Chika',
-  description: 'Aplikasi Kasir untuk Semua Jenis Usaha',
+  title: 'Chika POS',
+  description: 'Aplikasi POS untuk Semua Jenis Usaha',
 };
 
 export default function RootLayout({
