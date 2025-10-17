@@ -50,7 +50,7 @@ Tugas Anda adalah membuat 3-4 tingkatan tantangan penjualan untuk karyawan berda
 
 Gunakan Bahasa Indonesia untuk semua output teks.
 Nama tingkatan (tier) harus kreatif dan memotivasi, relevan dengan **{{businessDescription}}**.
-Contoh untuk F&B: "Koki Andal", "Pramusaji Cepat", "Kasir Juara", "Barista Gesit", "Penyeduh Bintang", "Raja Omset".
+Contoh untuk toko retail: "Sales Star", "Customer Champion", "Raja Omset".
 Deskripsi tantangan harus singkat, memotivasi, dan dalam Bahasa Indonesia.
 Target harus realistis namun menantang bagi karyawan toko, dimulai dari dasar yang wajar dan meningkat untuk setiap tingkatan. Pertimbangkan durasi tantangan saat menetapkan target. Periode yang lebih pendek harus memiliki target yang lebih rendah.
 Hadiah harus didistribusikan dari anggaran yang disediakan. Tingkat tertinggi harus mendapatkan hadiah terbesar. Hadiahnya bisa berupa bonus tunai.

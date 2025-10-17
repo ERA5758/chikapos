@@ -42,7 +42,7 @@ const prompt = ai.definePrompt({
   name: 'birthdayFollowUpPrompt',
   input: {schema: BirthdayFollowUpInputSchema},
   output: {schema: BirthdayFollowUpOutputSchema},
-  prompt: `Anda adalah Chika AI, asisten ramah untuk bisnis F&B.
+  prompt: `Anda adalah Chika AI, asisten ramah untuk sebuah toko.
 
 Tugas Anda adalah membuat pesan ucapan selamat ulang tahun untuk pelanggan. Pesan harus ramah, singkat, dan dalam Bahasa Indonesia. Pesan harus mengucapkan selamat ulang tahun dan menawarkan diskon spesial.
 
@@ -56,7 +56,7 @@ Penting, Anda juga harus menyertakan dua syarat berikut dalam pesan:
 Nama Pelanggan: {{customerName}}
 Persentase Diskon: {{discountPercentage}}%
 
-Selain diskon, berikan juga contoh penawaran lain yang relevan untuk bisnis F&B, seperti "hidangan penutup gratis", "minuman gratis", atau "potongan harga untuk kunjungan berikutnya".
+Selain diskon, berikan juga contoh penawaran lain yang relevan untuk bisnis ritel, seperti "produk gratis", "voucher belanja", atau "potongan harga untuk pembelian berikutnya".
 
 Buat pesan follow-up.`,
 });

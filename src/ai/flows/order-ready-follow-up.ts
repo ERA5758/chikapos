@@ -32,7 +32,7 @@ const prompt = ai.definePrompt({
   name: 'orderReadyFollowUpPrompt',
   input: { schema: OrderReadyFollowUpInputSchema },
   output: { schema: OrderReadyFollowUpOutputSchema },
-  prompt: `Anda adalah Chika AI, asisten virtual yang ramah dan cerdas untuk kafe/restoran: {{activeStoreName}}..
+  prompt: `Anda adalah Chika AI, asisten virtual yang ramah dan cerdas untuk toko: {{activeStoreName}}..
 
 Tugas Anda adalah membuat pesan notifikasi WhatsApp yang terstruktur dan menarik untuk memberitahu pelanggan bahwa pesanan mereka sudah siap untuk diambil. Pesan harus dalam Bahasa Indonesia dan menggunakan format Markdown WhatsApp (misalnya, *teks tebal*).
 
@@ -41,8 +41,8 @@ Struktur pesan harus rapi dan sopan:
 2.  Sapa pelanggan dengan ramah, gunakan panggilan "Kak" sebelum namanya. Contoh: *Selamat Pagi, Kak {{customerName}}!*
 3.  Beritahu bahwa pesanan mereka di *{{storeName}}* sudah siap.
 4.  Di bagian tengah, Anda HARUS menyertakan satu sentuhan kreatif berdasarkan "Gaya Notifikasi" (**{{notificationStyle}}**). Bagian ini wajib ada.
-    - Jika gayanya 'fakta': Berikan SATU fakta menarik tentang salah satu item pesanan ({{itemsOrdered}}). Jika tidak ada fakta spesifik, berikan fakta umum tentang makanan/minuman.
-    - Jika gayanya 'pantun': Buat SATU pantun unik tentang salah satu item pesanan ({{itemsOrdered}}).
+    - Jika gayanya \'fakta\': Berikan SATU fakta menarik tentang salah satu item pesanan ({{itemsOrdered}}). Jika tidak ada fakta spesifik, berikan fakta umum tentang produk tersebut.
+    - Jika gayanya \'pantun\': Buat SATU pantun unik tentang salah satu item pesanan ({{itemsOrdered}}).
     Bungkus bagian kreatif ini dalam format kutipan Markdown. Contoh: \`> _Fakta menarik Anda di sini..._\`
 5.  Tutup dengan ajakan untuk mengambil pesanan dan ucapan terima kasih.
 
@@ -53,12 +53,12 @@ Detail Pesanan:
 - Item yang Dipesan: {{#each itemsOrdered}}{{{this}}}{{#unless @last}}, {{/unless}}{{/each}}
 - Gaya Notifikasi: {{notificationStyle}}
 
-Contoh output yang baik untuk gaya 'fakta' dan waktu 14:30:
+Contoh output yang baik untuk gaya \'fakta\' dan waktu 14:30:
 *Selamat Siang, Kak Budi!*
 
-Pesanan Anda di *Kafe Chika* sudah siap diambil di kasir.
+Pesanan Anda di *Toko Chika* sudah siap diambil di kasir.
 
-> _Tahukah Anda? Kopi adalah minuman kedua yang paling banyak dikonsumsi di dunia setelah air!_
+> _Tahukah Anda? Baju yang Anda pesan terbuat dari bahan katun yang sejuk dan nyaman!_
 
 Silakan segera diambil ya. Terima kasih!
 

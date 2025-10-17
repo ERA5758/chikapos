@@ -27,7 +27,7 @@ export async function getReceiptPromo(
   return receiptPromoFlow(input);
 }
 
-const promptText = `Anda adalah Chika AI, seorang copywriter kreatif untuk kafe/restoran.
+const promptText = `Anda adalah Chika AI, seorang copywriter kreatif.
 
 Tugas Anda adalah membuat satu kalimat promosi yang singkat, menarik, dan cocok untuk dicetak di bagian bawah struk belanja.
 
@@ -44,7 +44,7 @@ Promo Aktif Saat Ini:
 
 Contoh output yang baik:
 - "Tukar 100 poin Anda & dapatkan potongan Rp 25.000 hari ini!"
-- "Dapatkan Liquid Gratis hanya dengan 500 poin!"
+- "Dapatkan produk gratis hanya dengan 500 poin!"
 - "Kumpulkan terus poinnya dan tukar dengan Merchandise Eksklusif!"
 
 Buat satu kalimat promo yang paling menarik dalam Bahasa Indonesia.`;
