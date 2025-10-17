@@ -1,7 +1,7 @@
 {
   "name": "Kasir POS Chika",
   "short_name": "Chika POS",
-  "description": "Aplikasi Kasir POS F&B Cerdas dengan Fitur AI",
+  "description": "Aplikasi Kasir POS Ritel Cerdas dengan Fitur AI",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#1A1A1A",

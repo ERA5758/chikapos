@@ -21,7 +21,7 @@ import type { Product, ProductCategory } from '@/lib/types';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { ListFilter, MoreHorizontal, PlusCircle, Search, Loader2, Sparkles, MessageSquare, Edit } from 'lucide-react';
+import { ListFilter, MoreHorizontal, PlusCircle, Search, Sparkles, MessageSquare, Edit } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -55,43 +55,12 @@ import { db, auth } from '@/lib/firebase';
 import { doc, deleteDoc, updateDoc } from 'firebase/firestore';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useToast } from '@/hooks/use-toast';
-import { cn } from '@/lib/utils';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useAuth } from '@/contexts/auth-context';
 import { useDashboard } from '@/contexts/dashboard-context';
-import { Switch } from '@/components/ui/switch';
-import { Label } from '@/components/ui/label';
 import { AIConfirmationDialog } from '@/components/dashboard/ai-confirmation-dialog';
 import { DescriptionGeneratorOutput } from '@/ai/flows/description-generator';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-
-function StockToggle({ product, onStockChange, isUpdating }: { product: Product; onStockChange: (productId: string, newStock: number) => void; isUpdating: boolean; }) {
-  const isAvailable = product.stock > 0;
-
-  const handleToggle = (checked: boolean) => {
-    // If turning on, set stock to 1 (or a default value). If turning off, set to 0.
-    const newStock = checked ? 1 : 0;
-    onStockChange(product.id, newStock);
-  };
-  
-  if (isUpdating) {
-    return <Loader2 className="h-4 w-4 animate-spin mx-auto text-muted-foreground" />;
-  }
-
-  return (
-    <div className="flex items-center justify-center space-x-2">
-      <Switch
-        id={`stock-switch-${product.id}`}
-        checked={isAvailable}
-        onCheckedChange={handleToggle}
-        aria-label="Toggle stock availability"
-      />
-      <Label htmlFor={`stock-switch-${product.id}`} className={cn(isAvailable ? "text-green-600" : "text-destructive")}>
-        {isAvailable ? 'Tersedia' : 'Habis'}
-      </Label>
-    </div>
-  );
-}
 
 
 export default function Products() {
@@ -107,39 +76,12 @@ export default function Products() {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
 
   const [selectedProduct, setSelectedProduct] = React.useState<Product | null>(null);
-  const [updatingStock, setUpdatingStock] = React.useState<string | null>(null);
   const { toast } = useToast();
 
   const [searchTerm, setSearchTerm] = React.useState('');
   const [selectedCategories, setSelectedCategories] = React.useState<Set<ProductCategory>>(new Set());
   
   const currentStoreId = activeStore?.id;
-
-
-  const handleStockChange = async (productId: string, newStock: number) => {
-    if (!currentStoreId) return;
-    
-    setUpdatingStock(productId);
-    const productRef = doc(db, 'stores', currentStoreId, 'products', productId);
-
-    try {
-      await updateDoc(productRef, { stock: newStock });
-      toast({
-          title: 'Status Stok Diperbarui',
-          description: `Ketersediaan produk telah diperbarui.`,
-      });
-      refreshData();
-    } catch (error) {
-      console.error("Error updating stock:", error);
-      toast({
-        variant: 'destructive',
-        title: 'Gagal Memperbarui Stok',
-        description: 'Terjadi kesalahan. Coba lagi.',
-      });
-    } finally {
-      setTimeout(() => setUpdatingStock(null), 500); // give a bit of time for visual feedback
-    }
-  };
 
 
   const handleEditClick = (product: Product) => {
@@ -333,7 +275,7 @@ export default function Products() {
               <TableRow>
                 <TableHead>Nama</TableHead>
                 <TableHead>Kategori</TableHead>
-                <TableHead className="text-center w-[180px]">Status Ketersediaan</TableHead>
+                <TableHead className="text-center">Stok</TableHead>
                 <TableHead className="text-right">Harga</TableHead>
                 {isAdmin && <TableHead className="w-[100px] text-right">Aksi</TableHead>}
               </TableRow>
@@ -344,7 +286,7 @@ export default function Products() {
                   <TableRow key={i}>
                     <TableCell><Skeleton className="h-5 w-3/4" /></TableCell>
                     <TableCell><Skeleton className="h-6 w-20" /></TableCell>
-                    <TableCell className="text-center"><Skeleton className="h-8 w-24 mx-auto" /></TableCell>
+                    <TableCell className="text-center"><Skeleton className="h-5 w-12 mx-auto" /></TableCell>
                     <TableCell className="text-right"><Skeleton className="h-5 w-20 ml-auto" /></TableCell>
                     {isAdmin && <TableCell className="text-right"><Skeleton className="h-8 w-8 ml-auto" /></TableCell>}
                   </TableRow>
@@ -356,19 +298,7 @@ export default function Products() {
                     <TableCell>
                       <Badge variant="outline">{product.category}</Badge>
                     </TableCell>
-                    <TableCell className="text-center" onClick={(e) => e.stopPropagation()}>
-                       {isAdmin ? (
-                         <StockToggle 
-                          product={product} 
-                          onStockChange={handleStockChange}
-                          isUpdating={updatingStock === product.id}
-                         />
-                       ) : (
-                         <Badge variant={product.stock > 0 ? 'secondary' : 'destructive'} className={product.stock > 0 ? 'border-green-500/50 text-green-700' : ''}>
-                           {product.stock > 0 ? 'Tersedia' : 'Habis'}
-                         </Badge>
-                       )}
-                    </TableCell>
+                    <TableCell className="text-center">{product.stock}</TableCell>
                     <TableCell className="text-right">
                       Rp {product.price.toLocaleString('id-ID')}
                     </TableCell>

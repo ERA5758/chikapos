@@ -190,7 +190,7 @@ export function AddProductForm({ setDialogOpen, userRole, onProductAdded, active
             <FormItem>
               <FormLabel>Nama Produk</FormLabel>
               <FormControl>
-                <Input placeholder="e.g., Kopi Susu" {...field} />
+                <Input placeholder="e.g., Kemeja Polos" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -203,7 +203,7 @@ export function AddProductForm({ setDialogOpen, userRole, onProductAdded, active
             <FormItem>
               <FormLabel>Merek</FormLabel>
               <FormControl>
-                <Input placeholder="e.g., Chika Coffee" {...field} />
+                <Input placeholder="e.g., Chika Fashion" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -240,7 +240,7 @@ export function AddProductForm({ setDialogOpen, userRole, onProductAdded, active
             <FormItem>
               <FormLabel>Deskripsi (Opsional)</FormLabel>
               <FormControl>
-                <Textarea placeholder="Contoh: Perpaduan kopi dan susu yang nikmat..." {...field} />
+                <Textarea placeholder="Contoh: Kemeja polos bahan katun, nyaman dipakai sehari-hari." {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

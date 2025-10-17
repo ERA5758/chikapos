@@ -4,11 +4,15 @@
 // Untuk menambah kategori produk baru, tambahkan nama kategori di dalam daftar di bawah ini.
 // Pastikan untuk mengapitnya dengan tanda kutip tunggal (') dan menambahkan koma di akhir.
 export const productCategories = [
-  'Kopi',
-  'Non-Kopi',
-  'Makanan Utama',
-  'Makanan Ringan',
-  'Dessert',
+  'Pakaian',
+  'Aksesoris',
+  'Elektronik',
+  'Perabotan',
+  'Kecantikan',
+  'Kesehatan',
+  'Mainan',
+  'Buku',
+  'Olahraga',
   'Lainnya',
 ] as const;
 
@@ -89,7 +93,7 @@ export type Customer = {
   avatarUrl: string;
 };
 
-export type TransactionStatus = 'Diproses' | 'Selesai' | 'Selesai Dibayar';
+export type TransactionStatus = 'Selesai' | 'Diproses';
 
 export type Transaction = {
   id: string;
@@ -106,7 +110,6 @@ export type Transaction = {
   pointsEarned: number;
   pointsRedeemed: number;
   items: TransactionItem[];
-  tableId?: string; // Optional table reference
   status: TransactionStatus;
   generatedFollowUpText?: string;
 };

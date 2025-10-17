@@ -19,12 +19,11 @@ import Promotions from '@/app/dashboard/views/promotions';
 import ReceiptSettings from '@/app/dashboard/views/receipt-settings';
 import AIBusinessPlan from '@/app/dashboard/views/ai-business-plan';
 import CatalogSettings from '@/app/dashboard/views/catalog-settings';
-import Tables from '@/app/dashboard/views/tables';
 import { Suspense } from 'react';
 import type { User, Transaction } from '@/lib/types';
 import { useAuth } from '@/contexts/auth-context';
 import { useDashboard } from '@/contexts/dashboard-context';
-import { UtensilsCrossed, Printer } from 'lucide-react';
+import { Store, Printer } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Receipt } from '@/components/dashboard/receipt';
@@ -84,7 +83,7 @@ function DashboardContent() {
   const renderView = () => {
     const unauthorizedCashierViews = ['employees', 'challenges', 'receipt-settings', 'customer-analytics', 'ai-business-plan', 'catalog'];
     if (currentUser?.role === 'cashier' && unauthorizedCashierViews.includes(view)) {
-        return <Tables />;
+        return <POS onPrintRequest={setTransactionToPrint} />;
     }
 
     switch (view) {
@@ -94,13 +93,7 @@ function DashboardContent() {
         }
         return <Overview />;
       case 'pos':
-        const tableId = searchParams.get('tableId');
-        if (tableId) {
-             return <POS 
-                onPrintRequest={setTransactionToPrint}
-             />;
-        }
-        return <Tables />;
+        return <POS onPrintRequest={setTransactionToPrint} />;
       case 'products':
         return <Products />;
       case 'customers':
@@ -124,17 +117,11 @@ function DashboardContent() {
       case 'catalog':
         return <CatalogSettings />;
       default:
-        return <Tables />;
+        return <POS onPrintRequest={setTransactionToPrint} />;
     }
   };
 
   const getTitle = () => {
-    const tableId = searchParams.get('tableId');
-    const tableName = searchParams.get('tableName');
-    if (view === 'pos' && tableId) {
-        return `Pesanan: ${tableName || ''}`;
-    }
-
     const baseTitle = {
       'overview': 'Dashboard Overview',
       'pos': 'Kasir POS',
@@ -190,7 +177,7 @@ function DashboardSkeleton() {
     return (
         <div className="flex min-h-screen w-full items-center justify-center bg-background">
             <div className="flex flex-col items-center gap-4">
-                <UtensilsCrossed className="h-16 w-16 animate-pulse-slow text-primary/50" />
+                <Store className="h-16 w-16 animate-pulse-slow text-primary/50" />
                 <p className="font-headline text-xl tracking-wider text-muted-foreground">
                     Loading Dashboard...
                 </p>

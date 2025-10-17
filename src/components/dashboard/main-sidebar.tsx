@@ -79,7 +79,7 @@ export function MainSidebar({ pradanaTokenBalance }: MainSidebarProps) {
     },
     {
       view: 'pos',
-      label: 'Manajemen Meja',
+      label: 'POS',
       icon: <Armchair />,
       roles: ['admin', 'cashier'],
     },

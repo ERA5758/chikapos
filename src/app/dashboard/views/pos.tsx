@@ -22,7 +22,6 @@ import {
   ScanBarcode,
   Gift,
   Coins,
-  Armchair,
   Bell,
   PackageX,
 } from 'lucide-react';
@@ -52,7 +51,7 @@ import { collection, doc, runTransaction, increment, serverTimestamp } from 'fir
 import { Skeleton } from '@/components/ui/skeleton';
 import { useAuth } from '@/contexts/auth-context';
 import { useDashboard } from '@/contexts/dashboard-context';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { Switch } from '@/components/ui/switch';
 
 type POSProps = {
@@ -66,10 +65,6 @@ export default function POS({ onPrintRequest }: POSProps) {
   const { products, customers, feeSettings } = dashboardData;
 
   const router = useRouter();
-  const searchParams = useSearchParams();
-
-  const [selectedTableId, setSelectedTableId] = React.useState(() => searchParams.get('tableId'));
-  const [selectedTableName, setSelectedTableName] = React.useState(() => searchParams.get('tableName'));
 
   const [pointSettings, setPointSettings] = React.useState<PointEarningSettings | null>(null);
 
@@ -78,23 +73,6 @@ export default function POS({ onPrintRequest }: POSProps) {
       getPointEarningSettings(activeStore.id).then(setPointSettings);
     }
   }, [activeStore]);
-
-  React.useEffect(() => {
-    const currentView = searchParams.get('view');
-    if (currentView !== 'pos' || !searchParams.has('tableId')) {
-      if (selectedTableId) {
-        setSelectedTableId(null);
-        setSelectedTableName(null);
-      }
-    } else {
-      const tableIdFromParams = searchParams.get('tableId');
-      if (tableIdFromParams !== selectedTableId) {
-        setSelectedTableId(tableIdFromParams);
-        setSelectedTableName(searchParams.get('tableName'));
-      }
-    }
-  }, [searchParams, selectedTableId]);
-
 
   const [isProcessingCheckout, setIsProcessingCheckout] = React.useState(false);
   const [cart, setCart] = React.useState<CartItem[]>([]);
@@ -106,7 +84,6 @@ export default function POS({ onPrintRequest }: POSProps) {
   const [discountType, setDiscountType] = React.useState<'percent' | 'nominal'>('percent');
   const [discountValue, setDiscountValue] = React.useState(0);
   const [pointsToRedeem, setPointsToRedeem] = React.useState(0);
-  const [isDineIn, setIsDineIn] = React.useState(true); // Default to true for table orders
   const { toast } = useToast();
 
   const customerOptions = (customers || []).map((c) => ({
@@ -260,8 +237,8 @@ export default function POS({ onPrintRequest }: POSProps) {
       toast({ variant: 'destructive', title: 'Keranjang Kosong', description: 'Silakan tambahkan produk ke keranjang.' });
       return;
     }
-    if (!currentUser || !activeStore || !selectedTableId) {
-      toast({ variant: 'destructive', title: 'Sesi atau Meja Tidak Valid', description: 'Data staff, toko, atau meja tidak ditemukan. Silakan pilih meja dari halaman utama.' });
+    if (!currentUser || !activeStore) {
+      toast({ variant: 'destructive', title: 'Sesi Tidak Valid', description: 'Data staff atau toko tidak ditemukan.' });
       return;
     }
 
@@ -350,7 +327,7 @@ export default function POS({ onPrintRequest }: POSProps) {
           receiptNumber: newReceiptNumber,
           storeId: activeStore.id,
           customerId: selectedCustomer?.id || 'N/A',
-          customerName: selectedCustomer?.name || (selectedTableId ? `Meja ${selectedTableName}` : 'Guest'),
+          customerName: selectedCustomer?.name || 'Guest',
           staffId: currentUser.id,
           createdAt: new Date().toISOString(),
           subtotal: subtotal,
@@ -360,26 +337,13 @@ export default function POS({ onPrintRequest }: POSProps) {
           pointsEarned: pointsEarned,
           pointsRedeemed: pointsToRedeem,
           items: cart,
-          status: 'Diproses',
-          tableId: selectedTableId,
+          status: 'Selesai',
         };
         transaction.set(newTransactionRef, transactionData);
-
-        // 6. Update table status
-        const tableRef = doc(db, 'stores', storeId, 'tables', selectedTableId);
-        transaction.update(tableRef, {
-          status: 'Terisi',
-          currentOrder: {
-            items: cart,
-            totalAmount: totalAmount,
-            orderTime: new Date().toISOString(),
-          }
-        });
-
         finalTransactionData = transactionData;
       });
 
-      toast({ title: "Pesanan Meja Berhasil Dibuat!", description: "Transaksi telah disimpan dan status meja diperbarui." });
+      toast({ title: "Transaksi Berhasil!", description: "Transaksi telah berhasil disimpan." });
 
       if (finalTransactionData) {
         onPrintRequest(finalTransactionData);
@@ -392,10 +356,6 @@ export default function POS({ onPrintRequest }: POSProps) {
       setPointsToRedeem(0);
       setSelectedCustomer(undefined);
       refreshData();
-
-      const params = new URLSearchParams();
-      params.set('view', 'pos');
-      router.push(`/dashboard?${params.toString()}`);
 
     } catch (error) {
       console.error("Checkout failed:", error);
@@ -485,7 +445,7 @@ export default function POS({ onPrintRequest }: POSProps) {
           <Card>
             <CardHeader>
               <CardTitle className="font-headline tracking-wider">
-                {selectedTableId ? `Pesanan untuk ${selectedTableName}` : 'Pesanan Saat Ini'}
+                Pesanan Saat Ini
               </CardTitle>
             </CardHeader>
             <CardContent className="flex flex-col gap-4">
@@ -522,15 +482,6 @@ export default function POS({ onPrintRequest }: POSProps) {
                   </Dialog>
                 </div>
               </div>
-
-
-              {selectedTableId && !selectedCustomer && (
-                <div className="flex items-center gap-2 rounded-md border border-dashed p-3">
-                  <Armchair className="h-5 w-5 text-muted-foreground" />
-                  <p className="font-medium text-muted-foreground">Mode Pesanan Meja</p>
-                </div>
-              )}
-
 
               {selectedCustomer && (
                 <div className="flex items-center justify-between rounded-lg border bg-card p-3">
@@ -701,14 +652,6 @@ export default function POS({ onPrintRequest }: POSProps) {
               {selectedCustomer && cart.length > 0 && feeSettings && (
                 <LoyaltyRecommendation customer={selectedCustomer} totalPurchaseAmount={totalAmount} feeSettings={feeSettings} />
               )}
-
-              <div className="flex items-center justify-between rounded-md border p-3">
-                <Label htmlFor="dine-in-switch" className="flex items-center gap-2">
-                  <Bell className="h-4 w-4" />
-                  <span>Sajikan di Sini (Dine-in)</span>
-                </Label>
-                <Switch id="dine-in-switch" checked={isDineIn} onCheckedChange={setIsDineIn} disabled={!!selectedTableId} />
-              </div>
 
               <div className="grid grid-cols-3 gap-2">
                 <Button variant={paymentMethod === 'Cash' ? 'default' : 'secondary'} onClick={() => setPaymentMethod('Cash')}>Tunai</Button>
